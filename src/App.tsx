@@ -181,7 +181,7 @@ function Header() {
         <a href="#access">统一接入</a>
         <a href="#agents">预置 Agent</a>
       </nav>
-      <a className="topbar-action" href="#team">登陆</a>
+      <a className="topbar-action" href="#team">登录</a>
     </header>
   );
 }
