@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { useRef, useState, type CSSProperties } from "react";
 import logo from "./assets/aily-logo.svg";
 import agentBlueJacket from "./assets/agent-blue-jacket.png";
 import agentBrownSweater from "./assets/agent-brown-sweater.png";
@@ -11,15 +14,20 @@ import agentRedScarf from "./assets/agent-red-scarf.png";
 import agentStripeHat from "./assets/agent-stripe-hat.png";
 import agentYellow from "./assets/agent-yellow.png";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 type IconName =
   | "agent"
   | "arrow"
+  | "board"
   | "bell"
   | "branch"
   | "calendar"
   | "check"
   | "cloud"
+  | "desktop"
   | "doc"
+  | "file"
   | "lock"
   | "message"
   | "shield"
@@ -229,6 +237,41 @@ const presetAgents: AgentPreset[] = [
     avatar: agentStripeHat,
     accent: "#74c8f4",
   },
+  {
+    name: "路演材料撰写",
+    role: "融资材料 Agent",
+    desc: "梳理投资人关注点，生成路演结构和可发送材料。",
+    avatar: agentRedScarf,
+    accent: "#ff9b73",
+  },
+  {
+    name: "客户成功跟进",
+    role: "客成运营 Agent",
+    desc: "汇总客户反馈，识别续约风险，生成跟进建议。",
+    avatar: agentFlower,
+    accent: "#55c7a6",
+  },
+  {
+    name: "知识库整理员",
+    role: "知识运营 Agent",
+    desc: "沉淀问答、更新文档目录，把零散经验变成知识库。",
+    avatar: agentYellow,
+    accent: "#f3b64e",
+  },
+  {
+    name: "财务报销助手",
+    role: "财务流程 Agent",
+    desc: "检查票据、补齐字段，提醒异常报销和审批卡点。",
+    avatar: agentPonytail,
+    accent: "#8bc7ff",
+  },
+  {
+    name: "舆情简报员",
+    role: "公关监测 Agent",
+    desc: "聚合媒体动态，提炼风险信号，生成每日舆情简报。",
+    avatar: agentBrownSweater,
+    accent: "#7bd6a6",
+  },
 ];
 
 function App() {
@@ -282,113 +325,30 @@ function Hero() {
             </a>
           </div>
         </div>
-        <HeroStoryboard />
+        <HeroHyperframes />
       </div>
     </section>
   );
 }
 
-function HeroStoryboard() {
-  const agents = [
-    {
-      name: "调研 Agent",
-      task: "整理项目材料",
-      avatar: agentYellow,
-      className: "research",
-      cards: ["群聊", "文档"],
-      output: "材料清单",
-    },
-    {
-      name: "写作 Agent",
-      task: "生成会议议程",
-      avatar: agentPonytail,
-      className: "writing",
-      cards: ["议题", "纪要"],
-      output: "会议议程",
-    },
-    {
-      name: "审核 Agent",
-      task: "检查风险遗漏",
-      avatar: agentGreenGlasses,
-      className: "review",
-      cards: ["风险", "事实", "引用"],
-      output: "风险摘要",
-    },
-    {
-      name: "执行 Agent",
-      task: "同步待办日程",
-      avatar: agentRedScarf,
-      className: "execute",
-      cards: ["待办", "群聊", "日程"],
-      output: "跟进计划",
-    },
-  ];
-
+function HeroHyperframes() {
   return (
-    <div className="hero-scene hero-orchestration" aria-label="飞书 aily 多 Agent 协同办公场景">
-      <div className="orchestration-window">
-        <div className="window-topline">
-          <span>飞书项目群</span>
-          <strong>新任务：把下周项目推进计划同步给团队</strong>
-        </div>
-        <div className="orchestration-body">
-          <div className="request-panel">
-            <span>任务进入</span>
-            <strong>准备项目推进建议</strong>
-            <em>目标 / 风险 / 行动项</em>
-          </div>
-          <div className="lead-panel">
-            <img src={agentLead} alt="主 Agent" />
-            <strong>主 Agent</strong>
-            <span>识别目标 · 拆解任务</span>
-            <div className="lead-thinking">
-              <em>读上下文</em>
-              <em>拆子任务</em>
-              <em>选成员</em>
-            </div>
-          </div>
-          <div className="agent-lanes">
-            {agents.map((agent) => (
-              <div className={`agent-lane ${agent.className}`} key={agent.name}>
-                <img src={agent.avatar} alt={agent.name} />
-                <div>
-                  <strong>{agent.name}</strong>
-                  <span>{agent.task}</span>
-                </div>
-                <i />
-              </div>
-            ))}
-          </div>
-          <svg className="orchestration-lines" viewBox="0 0 620 390" aria-hidden="true">
-            <path className="line request-line" d="M116 130 C172 120 206 132 246 160" />
-            <path className="line assign-line line-a" d="M328 162 C370 88 420 70 496 72" />
-            <path className="line assign-line line-b" d="M342 176 C414 146 462 142 536 146" />
-            <path className="line assign-line line-c" d="M344 206 C416 218 462 230 536 236" />
-            <path className="line assign-line line-d" d="M326 226 C366 300 418 324 496 324" />
-          </svg>
-          <div className="result-panel">
-            <span>结果回写飞书</span>
-            <strong>项目建议、群消息、待办已生成</strong>
-            <div>
-              <em>飞书文档</em>
-              <em>群公告</em>
-              <em>日程待办</em>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="hero-scene hero-hyperframes" aria-label="飞书 aily Agent Team 动态插图">
+      <iframe
+        title="飞书 aily Agent Team 动态插图"
+        src="/hyperframes/aily-hero/index.html"
+        loading="eager"
+        allow="autoplay"
+      />
     </div>
   );
 }
 
+
+
 function CapabilityExperience() {
   return (
     <section className="capability-experience" aria-label="五大核心能力">
-      <div className="capability-heading">
-        <span className="eyebrow">新版 aily 能力结构</span>
-        <h2>从个人助理，到企业级 Agent 协作平台</h2>
-      </div>
-      <CapabilityNav />
       <CapabilitySections />
     </section>
   );
@@ -453,47 +413,76 @@ function CapabilitySection({ capability }: { capability: Capability }) {
 
 function ProactiveSection({ capability }: { capability: Capability }) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [progress, setProgress] = useState(0);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    let frame = 0;
-
-    const updateProgress = () => {
-      frame = 0;
+  useGSAP(
+    () => {
       const section = sectionRef.current;
-      if (!section) return;
+      const track = trackRef.current;
+      if (!section || !track) return;
 
-      const rect = section.getBoundingClientRect();
-      const stickyOffset = 166;
-      const scrollable = Math.max(rect.height - window.innerHeight, 1);
-      const rawProgress = Math.min(Math.max((stickyOffset - rect.top) / scrollable, 0), 1);
-      const entryHold = 0.24;
-      const nextProgress =
-        rawProgress <= entryHold ? 0 : Math.min((rawProgress - entryHold) / (1 - entryHold), 1);
-      setProgress(nextProgress);
-    };
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const panels = gsap.utils.toArray<HTMLElement>(".proactive-panel", section);
+      if (reduceMotion || panels.length < 2) {
+        gsap.set(track, { clearProps: "transform" });
+        setActiveIndex(0);
+        return;
+      }
 
-    const requestUpdate = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateProgress);
-    };
+      let currentIndex = 0;
+      const total = panels.length - 1;
 
-    updateProgress();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
+      const revealPanel = (index: number) => {
+        const panel = panels[index];
+        if (!panel) return;
+        gsap.fromTo(
+          panel.querySelectorAll(".proactive-scene-text > span, .proactive-scene-text h3, .proactive-scene-text p, .proactive-points span, .proactive-visual"),
+          { autoAlpha: 0.72, y: 18 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.52,
+            stagger: 0.045,
+            ease: "power2.out",
+            overwrite: true,
+          },
+        );
+      };
 
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-    };
-  }, []);
+      revealPanel(0);
 
-  const sceneCount = proactiveScenes.length;
-  const activeIndex = Math.min(sceneCount - 1, Math.max(0, Math.floor(progress * sceneCount)));
-  const trackStyle = {
-    transform: `translate3d(${-progress * (sceneCount - 1) * 100}vw, 0, 0)`,
-  } as CSSProperties;
+      const horizontalDistance = () => Math.max(track.scrollWidth - window.innerWidth, 0);
+
+      gsap.to(track, {
+        x: () => -horizontalDistance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${horizontalDistance() + window.innerHeight * 0.35}`,
+          scrub: 0.85,
+          pin: ".proactive-pin",
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          snap: {
+            snapTo: (value) => Math.round(value * total) / total,
+            duration: { min: 0.22, max: 0.48 },
+            ease: "power2.out",
+          },
+          onUpdate: (self) => {
+            const nextIndex = Math.min(total, Math.max(0, Math.round(self.progress * total)));
+            if (nextIndex !== currentIndex) {
+              currentIndex = nextIndex;
+              setActiveIndex(nextIndex);
+              revealPanel(nextIndex);
+            }
+          },
+        },
+      });
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <section className="capability-section proactive-section proactive-horizontal-section" id={capability.id} ref={sectionRef}>
@@ -509,7 +498,7 @@ function ProactiveSection({ capability }: { capability: Capability }) {
           <p>{capability.intro}</p>
         </div>
         <div className="proactive-track-viewport">
-          <div className="proactive-track" style={trackStyle}>
+          <div className="proactive-track" ref={trackRef}>
             {proactiveScenes.map((item, index) => (
               <article className={`proactive-panel ${activeIndex === index ? "is-active" : ""}`} id={`proactive-${item.id}`} key={item.id}>
                 <div className="proactive-panel-inner">
@@ -842,45 +831,148 @@ function WorkspaceVisual() {
 }
 
 function PresetAgents() {
+  const agentsRef = useRef<HTMLElement | null>(null);
+  const rowOne = presetAgents.slice(0, 6);
+  const rowTwo = presetAgents.slice(6, 12);
+
+  useGSAP(
+    () => {
+      const section = agentsRef.current;
+      if (!section) return;
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rows = gsap.utils.toArray<HTMLElement>(".agent-marquee-track", section);
+      const cards = gsap.utils.toArray<HTMLElement>(".agent-card", section);
+      const rowTweens: gsap.core.Tween[] = [];
+      const listeners: Array<() => void> = [];
+
+      if (!reduceMotion) {
+        rows.forEach((row, index) => {
+          const distance = row.scrollWidth / 2;
+          if (!distance) return;
+          const reverse = row.closest(".agent-marquee-row")?.classList.contains("is-reverse");
+          const tween = gsap.fromTo(
+            row,
+            { x: reverse ? -distance : 0 },
+            {
+              x: reverse ? 0 : -distance,
+              duration: index === 0 ? 34 : 42,
+              ease: "none",
+              repeat: -1,
+            },
+          );
+          rowTweens.push(tween);
+        });
+
+        const marquee = section.querySelector(".agent-marquee");
+        if (marquee) {
+          const pause = () => rowTweens.forEach((tween) => tween.pause());
+          const resume = () => rowTweens.forEach((tween) => tween.resume());
+          marquee.addEventListener("mouseenter", pause);
+          marquee.addEventListener("mouseleave", resume);
+          marquee.addEventListener("focusin", pause);
+          marquee.addEventListener("focusout", resume);
+          listeners.push(() => {
+            marquee.removeEventListener("mouseenter", pause);
+            marquee.removeEventListener("mouseleave", resume);
+            marquee.removeEventListener("focusin", pause);
+            marquee.removeEventListener("focusout", resume);
+          });
+        }
+      }
+
+      cards.forEach((card) => {
+        const enter = () =>
+          gsap.to(card, {
+            y: -8,
+            scale: 1.018,
+            duration: 0.28,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        const leave = () =>
+          gsap.to(card, {
+            y: 0,
+            scale: 1,
+            duration: 0.24,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        card.addEventListener("mouseenter", enter);
+        card.addEventListener("mouseleave", leave);
+        card.addEventListener("focusin", enter);
+        card.addEventListener("focusout", leave);
+        listeners.push(() => {
+          card.removeEventListener("mouseenter", enter);
+          card.removeEventListener("mouseleave", leave);
+          card.removeEventListener("focusin", enter);
+          card.removeEventListener("focusout", leave);
+        });
+      });
+
+      return () => {
+        listeners.forEach((cleanup) => cleanup());
+        rowTweens.forEach((tween) => tween.kill());
+      };
+    },
+    { scope: agentsRef },
+  );
+
   return (
-    <section className="preset-agents" id="agents">
+    <section className="preset-agents" id="agents" ref={agentsRef}>
       <div className="section-title">
         <span className="eyebrow">预置 Agent</span>
         <h2>内置 Agent，按角色开箱可用</h2>
         <p>从运营、销售、法务到项目管理，把常见任务做成可直接唤起的 Agent，按场景加入个人或团队工作空间。</p>
       </div>
-      <div className="agent-grid">
-        {presetAgents.map((agent) => (
-          <article className="agent-card" key={agent.name} style={{ "--accent": agent.accent } as CSSProperties}>
-            <img src={agent.avatar} alt={`${agent.name} 头像`} />
-            <strong>{agent.name}</strong>
-            <span>{agent.role}</span>
-            <p>{agent.desc}</p>
-            <div className="agent-actions">
-              <a href="#native">查看能力</a>
-              <a href="#agents">制作同款</a>
-            </div>
-          </article>
-        ))}
-        <CustomAgentCard />
+      <div className="agent-marquee" aria-label="内置 Agent 横向展示墙">
+        <AgentMarqueeRow items={rowOne} speed={38} />
+        <AgentMarqueeRow items={rowTwo} reverse speed={44} />
       </div>
     </section>
   );
 }
 
-function CustomAgentCard() {
+function AgentMarqueeRow({
+  items,
+  reverse = false,
+  speed,
+}: {
+  items: AgentPreset[];
+  reverse?: boolean;
+  speed: number;
+}) {
+  const doubled = [...items, ...items];
+
   return (
-    <article className="agent-card custom-agent-card" style={{ "--accent": "#6388fd" } as CSSProperties}>
-      <div className="custom-agent-builder">
-        <span className="builder-avatar main">
-          <Icon name="agent" />
-        </span>
+    <div className={`agent-marquee-row ${reverse ? "is-reverse" : ""}`}>
+      <div className="agent-marquee-track" style={{ "--marquee-speed": `${speed}s` } as CSSProperties}>
+        {doubled.map((agent, index) => (
+          <AgentPresetCard agent={agent} key={`${agent.name}-${reverse ? "reverse" : "normal"}-${index}`} />
+        ))}
       </div>
-      <strong>自定义 Agent</strong>
-      <span>按业务场景制作专属 Agent</span>
-      <p>选择头像、语气、知识、Skill 与触发策略，把团队里的重复任务做成可复用的工作伙伴。</p>
+    </div>
+  );
+}
+
+function AgentPresetCard({ agent }: { agent: AgentPreset }) {
+  return (
+    <article className="agent-card" style={{ "--accent": agent.accent } as CSSProperties}>
+      <div className="agent-card-head">
+        <img src={agent.avatar} alt={`${agent.name} 头像`} />
+        <div>
+          <div className="agent-name-line">
+            <strong>{agent.name}</strong>
+            <span className="agent-verify" aria-hidden="true">
+              <Icon name="check" />
+            </span>
+          </div>
+          <span className="agent-card-role">{agent.role}</span>
+        </div>
+      </div>
+      <p>{agent.desc}</p>
       <div className="agent-actions">
-        <a href="#access">查看能力</a>
+        <a href="#native">查看能力</a>
         <a href="#agents">制作同款</a>
       </div>
     </article>
@@ -971,12 +1063,15 @@ function Icon({ name }: { name: IconName }) {
     <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
       {name === "agent" && <path {...stroke} d="M16 20v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M20 20v-1a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />}
       {name === "arrow" && <path {...stroke} d="M5 12h14M13 6l6 6-6 6" />}
+      {name === "board" && <path {...stroke} d="M5 5h14v14H5zM8 9h3M8 13h4M15 9h1M15 13h1M8 17h8" />}
       {name === "bell" && <path {...stroke} d="M6 8a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9M10 21h4" />}
       {name === "branch" && <path {...stroke} d="M6 3v6a3 3 0 0 0 3 3h6M18 9l3 3-3 3M6 21v-6a3 3 0 0 1 3-3" />}
       {name === "calendar" && <path {...stroke} d="M5 5h14v15H5zM8 3v4M16 3v4M5 10h14" />}
       {name === "check" && <path {...stroke} d="M5 12l4 4L19 6" />}
       {name === "cloud" && <path {...stroke} d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.2-2A5 5 0 0 0 7 18Z" />}
+      {name === "desktop" && <path {...stroke} d="M4 5h16v11H4zM9 20h6M12 16v4" />}
       {name === "doc" && <path {...stroke} d="M7 3h7l4 4v14H7zM14 3v5h5M10 13h6M10 17h5" />}
+      {name === "file" && <path {...stroke} d="M8 3h6l4 4v14H8zM14 3v5h4M11 13h4M11 17h5" />}
       {name === "lock" && <path {...stroke} d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v10H6z" />}
       {name === "message" && <path {...stroke} d="M5 6h14v9H9l-4 3V6Z" />}
       {name === "shield" && <path {...stroke} d="M12 3l7 3v5c0 5-3.2 8.5-7 10-3.8-1.5-7-5-7-10V6l7-3Z" />}
