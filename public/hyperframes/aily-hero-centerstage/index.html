@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>飞书 aily Hero Center Stage</title>
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #738198;
+        --primary: #5b7cff;
+        --cyan: #65d8cf;
+        --violet: #8a7cff;
+        --glass: rgba(255, 255, 255, 0.68);
+        --line: rgba(91, 124, 255, 0.22);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: transparent;
+        font-family:
+          Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system,
+          BlinkMacSystemFont, sans-serif;
+        color: var(--ink);
+      }
+
+      .composition {
+        position: relative;
+        width: 760px;
+        height: 548px;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .haze {
+        position: absolute;
+        inset: 22px 36px 28px;
+        background:
+          radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0) 34%),
+          radial-gradient(circle at 35% 35%, rgba(101, 216, 207, 0.2), rgba(101, 216, 207, 0) 34%),
+          radial-gradient(circle at 64% 37%, rgba(138, 124, 255, 0.16), rgba(138, 124, 255, 0) 34%),
+          radial-gradient(circle at 55% 70%, rgba(91, 124, 255, 0.12), rgba(91, 124, 255, 0) 42%);
+        filter: blur(2px);
+        z-index: 0;
+      }
+
+      .orbit {
+        position: absolute;
+        left: 104px;
+        top: 76px;
+        width: 552px;
+        height: 386px;
+        border: 1px solid rgba(91, 124, 255, 0.12);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .orbit.orbit-soft {
+        left: 158px;
+        top: 118px;
+        width: 444px;
+        height: 302px;
+        border-color: rgba(101, 216, 207, 0.13);
+      }
+
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(91, 124, 255, 0.28);
+        box-shadow: 0 0 14px rgba(91, 124, 255, 0.42);
+        z-index: 2;
+      }
+
+      .p1 { left: 188px; top: 142px; }
+      .p2 { left: 596px; top: 174px; background: rgba(101, 216, 207, 0.3); }
+      .p3 { left: 236px; top: 420px; background: rgba(138, 124, 255, 0.24); }
+      .p4 { left: 548px; top: 400px; }
+
+      .lead {
+        position: absolute;
+        left: 298px;
+        top: 118px;
+        width: 164px;
+        height: 172px;
+        z-index: 12;
+        text-align: center;
+      }
+
+      .lead-halo {
+        position: absolute;
+        left: 12px;
+        top: 8px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.7) 44%, rgba(91, 124, 255, 0.14) 78%),
+          linear-gradient(135deg, rgba(101, 216, 207, 0.26), rgba(138, 124, 255, 0.2));
+        box-shadow:
+          0 24px 70px rgba(90, 111, 196, 0.2),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.84);
+      }
+
+      .lead img {
+        position: absolute;
+        left: 25px;
+        top: 18px;
+        width: 114px;
+        height: 114px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 18px 42px rgba(87, 102, 160, 0.22);
+      }
+
+      .lead-name {
+        position: absolute;
+        left: 50%;
+        top: 142px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.76);
+        box-shadow: 0 12px 34px rgba(103, 119, 177, 0.12);
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .task {
+        position: absolute;
+        left: 303px;
+        top: 280px;
+        width: 154px;
+        height: 92px;
+        border-radius: 46px;
+        z-index: 18;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background:
+          radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.65) 42%, rgba(91, 124, 255, 0.16) 100%),
+          linear-gradient(135deg, rgba(101, 216, 207, 0.2), rgba(138, 124, 255, 0.22));
+        box-shadow:
+          0 20px 70px rgba(91, 124, 255, 0.24),
+          0 0 40px rgba(101, 216, 207, 0.22),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+      }
+
+      .task-glow {
+        position: absolute;
+        inset: -18px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(91, 124, 255, 0.18), rgba(91, 124, 255, 0));
+        z-index: -1;
+      }
+
+      .task-title {
+        display: block;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .task-state-wrap {
+        position: relative;
+        display: inline-grid;
+        margin-top: 7px;
+        min-width: 62px;
+        min-height: 20px;
+        place-items: center;
+      }
+
+      .task-state {
+        grid-area: 1 / 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px 9px;
+        border-radius: 999px;
+        color: var(--primary);
+        background: rgba(91, 124, 255, 0.1);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .task-state.run {
+        opacity: 0;
+        color: #4e65ee;
+        background: rgba(101, 216, 207, 0.18);
+      }
+
+      .click-ripple {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 96px;
+        height: 96px;
+        margin-left: -48px;
+        margin-top: -48px;
+        border-radius: 50%;
+        border: 1px solid rgba(91, 124, 255, 0.36);
+        opacity: 0;
+        z-index: -1;
+      }
+
+      .cursor {
+        position: absolute;
+        left: 420px;
+        top: 326px;
+        width: 24px;
+        height: 24px;
+        z-index: 30;
+        opacity: 0;
+      }
+
+      .cursor svg {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 10px 16px rgba(42, 55, 112, 0.18));
+      }
+
+      .agent {
+        position: absolute;
+        width: 112px;
+        height: 108px;
+        z-index: 10;
+        text-align: center;
+      }
+
+      .agent.doc { left: 125px; top: 118px; }
+      .agent.cal { left: 523px; top: 118px; }
+      .agent.project { left: 125px; top: 358px; }
+      .agent.local { left: 523px; top: 358px; }
+
+      .agent-avatar {
+        position: relative;
+        width: 78px;
+        height: 78px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.68);
+        box-shadow:
+          0 18px 40px rgba(102, 116, 169, 0.16),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.78);
+      }
+
+      .agent-avatar img {
+        position: absolute;
+        left: 7px;
+        top: 7px;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .ring {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 2px solid rgba(91, 124, 255, 0.1);
+      }
+
+      .ring-progress {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary) 0deg, rgba(91, 124, 255, 0) 0deg);
+        opacity: 0;
+        -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+        mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+      }
+
+      .agent-badge {
+        position: absolute;
+        right: -11px;
+        bottom: 5px;
+        min-width: 34px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--primary);
+        box-shadow: 0 10px 22px rgba(82, 100, 166, 0.14);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .agent-name {
+        margin-top: 9px;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .status-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: rgba(115, 129, 152, 0.34);
+        vertical-align: 1px;
+      }
+
+      .agent.active .status-dot {
+        background: var(--cyan);
+        box-shadow: 0 0 12px rgba(101, 216, 207, 0.78);
+      }
+
+      .signal {
+        position: absolute;
+        width: 46px;
+        height: 46px;
+        z-index: 20;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--primary);
+        box-shadow: 0 14px 30px rgba(86, 104, 166, 0.14);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .signal.im { left: 292px; top: 212px; }
+      .signal.doc-source { left: 422px; top: 212px; }
+      .signal.cal-source { left: 292px; top: 366px; }
+      .signal.todo-source { left: 422px; top: 366px; }
+
+      .chip {
+        position: absolute;
+        left: 352px;
+        top: 257px;
+        z-index: 24;
+        padding: 8px 12px;
+        min-width: 56px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--primary);
+        box-shadow: 0 14px 34px rgba(86, 104, 166, 0.15);
+        font-size: 12px;
+        font-weight: 800;
+        text-align: center;
+        opacity: 0;
+      }
+
+      .chip.doc-chip { --tx: -180px; --ty: -92px; }
+      .chip.cal-chip { --tx: 210px; --ty: -92px; }
+      .chip.project-chip { --tx: -180px; --ty: 148px; }
+      .chip.local-chip { --tx: 210px; --ty: 148px; }
+
+      .flow-svg,
+      .merge-svg {
+        position: absolute;
+        inset: 0;
+        z-index: 7;
+        pointer-events: none;
+      }
+
+      .flow-path,
+      .merge-path {
+        fill: none;
+        stroke: url(#lineGradient);
+        stroke-width: 2;
+        stroke-linecap: round;
+        opacity: 0;
+      }
+
+      .result-token {
+        position: absolute;
+        z-index: 22;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--primary);
+        box-shadow: 0 14px 34px rgba(86, 104, 166, 0.16);
+        font-size: 11px;
+        font-weight: 800;
+        opacity: 0;
+      }
+
+      .result-token.doc-result { left: 162px; top: 166px; --mx: 198px; --my: 92px; }
+      .result-token.cal-result { left: 556px; top: 166px; --mx: -196px; --my: 92px; }
+      .result-token.project-result { left: 162px; top: 406px; --mx: 198px; --my: -148px; }
+      .result-token.local-result { left: 556px; top: 406px; --mx: -196px; --my: -148px; }
+
+      .result-stack {
+        position: absolute;
+        left: 278px;
+        top: 180px;
+        width: 204px;
+        height: 178px;
+        z-index: 28;
+        opacity: 0;
+      }
+
+      .result-card {
+        position: absolute;
+        left: 0;
+        top: 28px;
+        width: 204px;
+        min-height: 130px;
+        border-radius: 28px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.68)),
+          radial-gradient(circle at 20% 10%, rgba(101, 216, 207, 0.18), transparent 40%);
+        box-shadow:
+          0 24px 70px rgba(91, 124, 255, 0.18),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+        padding: 20px 22px;
+      }
+
+      .result-card::before,
+      .result-card::after {
+        content: "";
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        height: 18px;
+        border-radius: 14px 14px 0 0;
+        background: rgba(255, 255, 255, 0.46);
+        z-index: -1;
+      }
+
+      .result-card::before { top: -12px; }
+      .result-card::after { top: -22px; left: 36px; right: 36px; opacity: 0.7; }
+
+      .result-title {
+        display: block;
+        color: var(--ink);
+        font-size: 17px;
+        font-weight: 900;
+        letter-spacing: 0;
+      }
+
+      .result-state {
+        display: inline-flex;
+        margin-top: 9px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(101, 216, 207, 0.16);
+        color: #268f88;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .result-items {
+        display: flex;
+        gap: 8px;
+        margin-top: 17px;
+      }
+
+      .result-items span {
+        width: 38px;
+        height: 34px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: rgba(91, 124, 255, 0.1);
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .cursor,
+        .signal,
+        .chip,
+        .result-token,
+        .flow-svg,
+        .merge-svg {
+          display: none;
+        }
+
+        .result-stack {
+          opacity: 1;
+        }
+
+        .task {
+          opacity: 0.24;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="composition"
+      data-composition-id="aily-hero-centerstage"
+      data-start="0"
+      data-duration="14"
+      data-width="760"
+      data-height="548"
+      data-track-index="0"
+    >
+      <div class="haze"></div>
+      <div class="orbit"></div>
+      <div class="orbit orbit-soft"></div>
+      <span class="particle p1"></span>
+      <span class="particle p2"></span>
+      <span class="particle p3"></span>
+      <span class="particle p4"></span>
+
+      <svg class="flow-svg" viewBox="0 0 760 548" aria-hidden="true">
+        <defs>
+          <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#65d8cf" stop-opacity="0.1" />
+            <stop offset="0.5" stop-color="#5b7cff" stop-opacity="0.72" />
+            <stop offset="1" stop-color="#8a7cff" stop-opacity="0.14" />
+          </linearGradient>
+        </defs>
+        <path class="flow-path path-doc" d="M380 266 C330 230 270 194 181 160" />
+        <path class="flow-path path-cal" d="M380 266 C430 230 488 194 580 160" />
+        <path class="flow-path path-project" d="M380 266 C330 320 266 382 181 400" />
+        <path class="flow-path path-local" d="M380 266 C430 320 488 382 580 400" />
+      </svg>
+
+      <svg class="merge-svg" viewBox="0 0 760 548" aria-hidden="true">
+        <path class="merge-path merge-doc" d="M181 160 C268 192 324 230 380 266" />
+        <path class="merge-path merge-cal" d="M580 160 C492 194 432 230 380 266" />
+        <path class="merge-path merge-project" d="M181 400 C264 382 324 320 380 266" />
+        <path class="merge-path merge-local" d="M580 400 C492 382 432 320 380 266" />
+      </svg>
+
+      <section class="agent doc" aria-label="文档 Agent">
+        <div class="agent-avatar">
+          <span class="ring"></span>
+          <span class="ring-progress"></span>
+          <img src="./assets/agent-ponytail.png" alt="" />
+          <span class="agent-badge">文档</span>
+        </div>
+        <div class="agent-name"><span class="status-dot"></span>文档 Agent</div>
+      </section>
+
+      <section class="agent cal" aria-label="日程 Agent">
+        <div class="agent-avatar">
+          <span class="ring"></span>
+          <span class="ring-progress"></span>
+          <img src="./assets/agent-stripe-hat.png" alt="" />
+          <span class="agent-badge">日程</span>
+        </div>
+        <div class="agent-name"><span class="status-dot"></span>日程 Agent</div>
+      </section>
+
+      <section class="agent project" aria-label="项目 Agent">
+        <div class="agent-avatar">
+          <span class="ring"></span>
+          <span class="ring-progress"></span>
+          <img src="./assets/agent-green-glasses.png" alt="" />
+          <span class="agent-badge">项目</span>
+        </div>
+        <div class="agent-name"><span class="status-dot"></span>项目 Agent</div>
+      </section>
+
+      <section class="agent local" aria-label="本地 Agent">
+        <div class="agent-avatar">
+          <span class="ring"></span>
+          <span class="ring-progress"></span>
+          <img src="./assets/agent-blue-jacket.png" alt="" />
+          <span class="agent-badge">本地</span>
+        </div>
+        <div class="agent-name"><span class="status-dot"></span>本地 Agent</div>
+      </section>
+
+      <section class="lead" aria-label="Team Lead">
+        <div class="lead-halo"></div>
+        <img src="./assets/agent-lead.png" alt="" />
+        <span class="lead-name">Team Lead</span>
+      </section>
+
+      <section class="task" aria-label="发现 Task">
+        <span class="task-glow"></span>
+        <span class="click-ripple"></span>
+        <span>
+          <span class="task-title">发现 Task</span>
+          <span class="task-state-wrap">
+            <span class="task-state suggest">建议运行</span>
+            <span class="task-state run">运行中</span>
+          </span>
+        </span>
+      </section>
+
+      <span class="signal im">IM</span>
+      <span class="signal doc-source">文档</span>
+      <span class="signal cal-source">日程</span>
+      <span class="signal todo-source">待办</span>
+
+      <span class="chip doc-chip">文档</span>
+      <span class="chip cal-chip">日程</span>
+      <span class="chip project-chip">项目</span>
+      <span class="chip local-chip">本地</span>
+
+      <span class="result-token doc-result">文档</span>
+      <span class="result-token cal-result">日程</span>
+      <span class="result-token project-result">待办</span>
+      <span class="result-token local-result">本地</span>
+
+      <section class="result-stack" aria-label="Task 已完成">
+        <div class="result-card">
+          <span class="result-title">Task 已完成</span>
+          <span class="result-state">待确认</span>
+          <div class="result-items">
+            <span>文档</span>
+            <span>日程</span>
+            <span>待办</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="cursor" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M7 4L24 18.6L16.5 20.1L13.3 27L7 4Z" fill="white" stroke="#5B7CFF" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </main>
+
+    <script src="./gsap.min.js"></script>
+    <script>
+      (function () {
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const id = "aily-hero-centerstage";
+        window.__timelines = window.__timelines || {};
+
+        const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+        window.__timelines[id] = tl;
+
+        const flowPaths = gsap.utils.toArray(".flow-path");
+        const mergePaths = gsap.utils.toArray(".merge-path");
+        const pathLength = (path) => path.getTotalLength();
+
+        flowPaths.forEach((path) => {
+          const length = pathLength(path);
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        });
+        mergePaths.forEach((path) => {
+          const length = pathLength(path);
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        });
+
+        tl.set([".signal", ".chip", ".result-token", ".result-stack", ".cursor"], { autoAlpha: 0 })
+          .set(".agent", { autoAlpha: 0.56, scale: 0.94, transformOrigin: "50% 50%" })
+          .set(".lead", { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%" })
+          .set(".task", { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%" })
+          .set(".ring-progress", { opacity: 0 })
+          .set(".flow-path", { opacity: 0 })
+          .set(".merge-path", { opacity: 0 });
+
+        if (!prefersReduced) {
+          tl.to(".particle", { y: -8, opacity: 0.62, stagger: 0.08, duration: 1.2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0.15)
+            .to(".task", { scale: 1.045, duration: 0.72, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0.18)
+            .fromTo(".signal", { autoAlpha: 0, scale: 0.45 }, { autoAlpha: 1, scale: 1, stagger: 0.08, duration: 0.45, ease: "back.out(1.7)" }, 0.55)
+            .to(".signal", { x: (i) => [48, -64, 48, -64][i], y: (i) => [82, 82, -72, -72][i], scale: 0.26, autoAlpha: 0, stagger: 0.04, duration: 0.78, ease: "power3.in" }, 1.36)
+
+            .fromTo(".cursor", { autoAlpha: 0, x: 34, y: 18 }, { autoAlpha: 1, x: 0, y: 0, duration: 0.44, ease: "power3.out" }, 2.18)
+            .to(".cursor", { x: -16, y: -18, duration: 0.46, ease: "power2.inOut" }, 2.58)
+            .to(".task", { scale: 1.12, duration: 0.16, ease: "power2.out" }, 2.98)
+            .to(".task", { scale: 1.03, duration: 0.34, ease: "elastic.out(1, 0.6)" }, 3.14)
+            .fromTo(".click-ripple", { autoAlpha: 0.75, scale: 0.42 }, { autoAlpha: 0, scale: 1.9, duration: 0.8, ease: "power2.out" }, 2.98)
+            .to(".task-state.suggest", { autoAlpha: 0, duration: 0.22 }, 3.06)
+            .to(".task-state.run", { autoAlpha: 1, duration: 0.26 }, 3.08)
+            .to(".cursor", { autoAlpha: 0, y: 16, duration: 0.28 }, 3.38)
+
+            .to(".lead", { scale: 1.07, duration: 0.56, ease: "back.out(1.6)" }, 3.62)
+            .to(".task", { y: 30, scale: 0.58, autoAlpha: 0.62, duration: 0.7, ease: "power3.inOut" }, 3.72)
+            .fromTo(
+              ".chip",
+              {
+                autoAlpha: 0,
+                scale: 0.42,
+                x: (i) => [-72, 18, -72, 18][i],
+                y: (i) => [-24, -24, 24, 24][i],
+              },
+              { autoAlpha: 1, scale: 1, stagger: 0.08, duration: 0.42, ease: "back.out(1.8)" },
+              4.08
+            )
+            .to(".flow-path", { opacity: 1, duration: 0.12 }, 4.2)
+            .to(".flow-path", { strokeDashoffset: 0, stagger: 0.04, duration: 0.74, ease: "power2.inOut" }, 4.28)
+            .to(".chip", { x: (i, el) => Number(getComputedStyle(el).getPropertyValue("--tx")), y: (i, el) => Number(getComputedStyle(el).getPropertyValue("--ty")), scale: 0.82, duration: 0.78, stagger: 0.03, ease: "power3.inOut" }, 4.42)
+            .to(".chip", { autoAlpha: 0, scale: 0.54, duration: 0.36, stagger: 0.03 }, 5.08)
+            .to(".task", { autoAlpha: 0, scale: 0.38, y: 54, duration: 0.44, ease: "power3.inOut" }, 5.08)
+            .to(".flow-path", { opacity: 0, duration: 0.38 }, 5.18)
+
+            .to(".agent", { autoAlpha: 1, scale: 1, stagger: 0.07, duration: 0.72, ease: "back.out(1.45)" }, 5.18)
+            .add(() => document.querySelectorAll(".agent").forEach((el) => el.classList.add("active")), 5.25)
+            .to(".ring-progress", { opacity: 1, duration: 0.18 }, 5.34)
+            .to(".ring-progress", { "--angle": 360, duration: 2.7, stagger: 0.14, ease: "power2.inOut",
+              onUpdate: function () {
+                const targets = this.targets();
+                targets.forEach((target) => {
+                  const angle = gsap.getProperty(target, "--angle") || 0;
+                  target.style.background = `conic-gradient(var(--primary) ${angle}deg, rgba(91, 124, 255, 0) ${angle}deg)`;
+                });
+              }
+            }, 5.5)
+            .to(".agent-avatar", { y: -5, duration: 0.85, stagger: 0.08, yoyo: true, repeat: 2, ease: "sine.inOut" }, 5.54)
+            .to(".lead", { scale: 0.98, autoAlpha: 0.82, duration: 0.9 }, 7.54)
+
+            .to(".merge-path", { opacity: 1, duration: 0.12 }, 8.72)
+            .to(".merge-path", { strokeDashoffset: 0, stagger: 0.04, duration: 0.62, ease: "power2.inOut" }, 8.82)
+            .fromTo(".result-token", { autoAlpha: 0, scale: 0.4 }, { autoAlpha: 1, scale: 1, stagger: 0.06, duration: 0.34, ease: "back.out(1.8)" }, 8.84)
+            .to(".result-token", { x: (i, el) => Number(getComputedStyle(el).getPropertyValue("--mx")), y: (i, el) => Number(getComputedStyle(el).getPropertyValue("--my")), scale: 0.62, duration: 0.72, stagger: 0.04, ease: "power3.inOut" }, 9.32)
+            .to(".result-token", { autoAlpha: 0, duration: 0.26, stagger: 0.03 }, 9.92)
+            .fromTo(".result-stack", { autoAlpha: 0, scale: 0.78, y: 20 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.72, ease: "back.out(1.45)" }, 9.96)
+            .to(".merge-path", { opacity: 0, duration: 0.36 }, 10.22)
+            .to(".lead", { autoAlpha: 0.2, scale: 0.86, duration: 0.72 }, 10.12)
+            .to(".agent", { autoAlpha: 0.46, scale: 0.92, duration: 0.8, stagger: 0.04 }, 10.42)
+
+            .to(".result-stack", { scale: 1.02, duration: 0.7, yoyo: true, repeat: 1, ease: "sine.inOut" }, 11.2)
+            .to(".result-stack", { autoAlpha: 0, scale: 0.86, y: 18, duration: 0.64, ease: "power3.inOut" }, 12.72)
+            .to(".task", { autoAlpha: 1, scale: 1, y: 0, duration: 0.66, ease: "power3.inOut" }, 12.82)
+            .to(".task-state.run", { autoAlpha: 0, duration: 0.18 }, 12.84)
+            .to(".task-state.suggest", { autoAlpha: 1, duration: 0.18 }, 12.86)
+            .to(".lead", { autoAlpha: 1, scale: 1, duration: 0.66, ease: "power3.inOut" }, 12.86)
+            .to(".agent", { autoAlpha: 0.56, scale: 0.94, duration: 0.62, stagger: 0.03 }, 12.92)
+            .to(".ring-progress", { opacity: 0, duration: 0.32 }, 13.02)
+            .add(() => document.querySelectorAll(".agent").forEach((el) => el.classList.remove("active")), 13.06)
+            .to({}, { duration: 0.44 });
+        } else {
+          tl.set(".result-stack", { autoAlpha: 1 })
+            .set(".task", { autoAlpha: 0.24 })
+            .set(".agent", { autoAlpha: 0.72, scale: 1 });
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const sampleTime = params.get("t");
+        if (sampleTime !== null) {
+          tl.pause(Math.max(0, Math.min(14, Number(sampleTime) || 0)));
+          return;
+        }
+
+        const shouldAutoplay =
+          window.self !== window.top ||
+          params.has("autoplay") ||
+          !window.__HYPERFRAMES_RENDERER__;
+
+        if (shouldAutoplay) {
+          tl.eventCallback("onComplete", () => tl.restart(true));
+          tl.play(0);
+        }
+      })();
+    </script>
+  </body>
+</html>

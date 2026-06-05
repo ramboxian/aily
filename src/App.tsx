@@ -325,18 +325,18 @@ function Hero() {
             </a>
           </div>
         </div>
-        <HeroHyperframes />
+        <HeroFlowIllustration />
       </div>
     </section>
   );
 }
 
-function HeroHyperframes() {
+function HeroFlowIllustration() {
   return (
-    <div className="hero-scene hero-hyperframes" aria-label="飞书 aily Agent Team 动态插图">
+    <div className="hero-scene hero-flow-illustration" aria-label="飞书 aily Agent Team 动态插图">
       <iframe
         title="飞书 aily Agent Team 动态插图"
-        src="/hyperframes/aily-hero/index.html"
+        src="/hyperframes/aily-hero-centerstage/index.html"
         loading="eager"
         allow="autoplay"
       />
